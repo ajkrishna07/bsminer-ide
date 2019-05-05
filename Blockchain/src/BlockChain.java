@@ -23,39 +23,41 @@ public class BlockChain {
     public static void main(String[] args) {
         //add our blocks to the blockchain ArrayList:
 
-        try {
-            server = new ServerSocket(5000);
-            socket = server.accept();
-            in = new DataInputStream(new BufferedInputStream(socket.getInputStream()));
-            line = in.readUTF();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
         blockchain.add(new Block("Hi im the first block", "0"));
         System.out.println("Trying to Mine block " + i + "... ");
         blockchain.get(i++).mineBlock(difficulty);
 
-        transaction1.add(" a paid b 10");
-        transaction1.add(" b paid c 10");
-        transaction1.add(" c paid d 10");
-        transaction1.add(" d paid a 10");
-        transaction1.add(line);
+        try {
+            server = new ServerSocket(5000);
+            socket = server.accept();
+            in = new DataInputStream(new BufferedInputStream(socket.getInputStream()));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        while(true) {
+            try {
+
+                line = in.readUTF();
+            } catch (IOException e) {
+                //e.printStackTrace();
+                break;
+            }
+
+            blockchain.add(new Block(line, blockchain.get(blockchain.size()-1).hash));
+            System.out.println("Trying to Mine block " + i + "... ");
+            blockchain.get(i++).mineBlock(difficulty);
 
 
-        blockchain.add(new Block(transaction1 , blockchain.get(blockchain.size()-1).hash));
-        System.out.println("Trying to Mine block" + i + "... ");
-        blockchain.get(i++).mineBlock(difficulty);
+            System.out.println("\nBlockchain is Valid: " + isChainValid());
+
+            String blockchainJson = new GsonBuilder().setPrettyPrinting().create().toJson(blockchain);
+            System.out.println(blockchain.get(0).data);
 
 
-        System.out.println("\nBlockchain is Valid: " + isChainValid());
-
-        String blockchainJson = new GsonBuilder().setPrettyPrinting().create().toJson(blockchain);
-        System.out.println(blockchain.get(0).data);
-
-
-        System.out.println("\nThe block chain: ");
-        System.out.println(blockchainJson);
+            System.out.println("\nThe block chain: ");
+            System.out.println(blockchainJson);
+        }
 
     }
 

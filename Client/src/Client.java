@@ -12,22 +12,32 @@ public class Client {
     private static DataOutputStream out     = null;
 
     public static void main(String[] args) {
-        try
-        {
+        int i=2;
+        try {
             socket = new Socket(InetAddress.getLocalHost(), 5000);
-            System.out.println("Connected");
-
             out = new DataOutputStream(socket.getOutputStream());
-            out.writeUTF("abcd");
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-        catch(UnknownHostException u)
-        {
-            System.out.println(u);
+        System.out.println("Connected");
+
+
+        while(i>=0) {
+            try
+            {
+                out.writeUTF("abcd");
+            }
+            catch(UnknownHostException u)
+            {
+                System.out.println(u);
+            }
+            catch(IOException e)
+            {
+                System.out.println(e    );
+            }
+            i--;
         }
-        catch(IOException i)
-        {
-            System.out.println(i);
-        }
+
 
     }
 }
