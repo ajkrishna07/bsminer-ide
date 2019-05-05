@@ -27,21 +27,32 @@ public class BlockChain {
         System.out.println("Trying to Mine block " + i + "... ");
         blockchain.get(i++).mineBlock(difficulty);
 
-        try {
+        /*try {
             server = new ServerSocket(5000);
             socket = server.accept();
             in = new DataInputStream(new BufferedInputStream(socket.getInputStream()));
         } catch (IOException e) {
             e.printStackTrace();
-        }
+        }*/
 
         while(true) {
             try {
 
+                server = new ServerSocket(5000);
+                socket = server.accept();
+                in = new DataInputStream(new BufferedInputStream(socket.getInputStream()));
                 line = in.readUTF();
+                server.close();
+                socket.close();
             } catch (IOException e) {
                 //e.printStackTrace();
-                break;
+                try {
+                    server.close();
+                    socket.close();
+                } catch (IOException ex) {
+                    //ex.printStackTrace();
+                }
+                continue;
             }
 
             blockchain.add(new Block(line, blockchain.get(blockchain.size()-1).hash));
