@@ -9,7 +9,7 @@ public class ReadURL {
     public static void main(String[] args) {
         URL url = null;
         try {
-            url = new URL("http://localhost/main.c");
+            url = new URL("http://192.168.0.105/main.txt");
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
@@ -24,6 +24,8 @@ public class ReadURL {
             try {
                 if (!((inputLine = in.readLine()) != null)) break;
                 System.out.println(inputLine);
+                String[] str_arr = inputLine.split(": ", 2);
+                System.out.println(str_arr[0] + "\n" + str_arr[1]);
             } catch (IOException e) {
                 e.printStackTrace();
             }

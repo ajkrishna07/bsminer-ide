@@ -1,8 +1,6 @@
 import com.google.gson.GsonBuilder;
 
-import java.io.BufferedInputStream;
-import java.io.DataInputStream;
-import java.io.IOException;
+import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
@@ -58,6 +56,16 @@ public class BlockChain {
             blockchain.add(new Block(line, blockchain.get(blockchain.size()-1).hash));
             System.out.println("Trying to Mine block " + i + "... ");
             blockchain.get(i++).mineBlock(difficulty);
+
+            try {
+                BufferedWriter writer = new BufferedWriter(new FileWriter("/var/www/html/main.txt", true));
+                writer.write(line);
+                writer.newLine();
+                writer.close();
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
 
 
             System.out.println("\nBlockchain is Valid: " + isChainValid());
